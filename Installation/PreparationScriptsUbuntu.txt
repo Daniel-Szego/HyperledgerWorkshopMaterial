@@ -1,6 +1,0 @@
-# Installing preconditions on a brand new Ubuntu 16.04 install 
-
-
-
-
-

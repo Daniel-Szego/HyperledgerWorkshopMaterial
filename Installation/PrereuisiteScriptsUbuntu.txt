@@ -1,0 +1,92 @@
+# Installing prerequisite on a brand new Ubuntu 16.04 install 
+
+# installing desktop tools if they are not available
+
+sudo apt-get install open-vm-tools
+
+sudo apt-get install open-vm-tools-desktop
+
+sudo reboot
+
+# Install curl
+
+sudo apt install curl
+
+curl -V
+
+# Install Docker CE
+
+sudo apt-get update
+
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+
+sudo apt-get update
+
+sudo apt-get install docker-ce
+
+sudo docker run hello-world
+
+# docker as a non-root user
+
+sudo groupadd docker
+
+sudo usermod -aG docker $USER
+
+docker run hello-world
+
+# install docker compose
+
+sudo apt update
+
+sudo apt install docker-compose
+
+docker --version && docker-compose --version
+
+# install Node.js and npm
+
+sudo bash -c "cat >/etc/apt/sources.list.d/nodesource.list" <<EOL
+deb https://deb.nodesource.com/node_6.x xenial main
+deb-src https://deb.nodesource.com/node_6.x xenial main
+EOL
+
+curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
+
+sudo apt update
+
+sudo apt install nodejs
+
+sudo apt install npm
+
+node --version && npm --version
+
+# Install Go language
+
+sudo apt update
+
+sudo curl -O https://storage.googleapis.com/golang/go1.9.2.linux-amd64.tar.gz 
+
+sudo tar -xvf go1.9.2.linux-amd64.tar.gz
+
+sudo mv go /usr/local
+
+echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.profile
+
+source ~/.profile
+
+go version
+
+
+
+
+
