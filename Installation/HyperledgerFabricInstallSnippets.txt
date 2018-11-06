@@ -1,6 +1,27 @@
 # Hyperledger Fabric install snippets and code fragements on Ubuntu 16.04 
 
+curl -sSL https://goo.gl/6wtTN5 | bash -s 1.1.0
 
+# listing images
 
+docker images
+
+# running first / test network 
+
+export PATH=$PWD/bin:$PATH
+
+git clone https://github.com/hyperledger/fabric-samples.git
+
+cd fabric-samples/first-network
+
+./byfn.sh -m generate
+
+./byfn.sh -m up
+
+docker rmi -f $(docker images -q)
+
+# shutting down the network 
+
+./byfn.sh -m down
 
 
