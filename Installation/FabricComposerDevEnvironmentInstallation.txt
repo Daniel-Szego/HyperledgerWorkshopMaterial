@@ -1,4 +1,4 @@
-#development environment for fabric composer
+#development environment for fabric composer including fabric as well
 
 npm install -g composer-cli@0.20
 

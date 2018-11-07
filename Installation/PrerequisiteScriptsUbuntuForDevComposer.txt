@@ -1,0 +1,24 @@
+# Installing prerequisite on a brand new Ubuntu 16.04 install  Composer and development environment
+
+# installing desktop tools if they are not available
+
+sudo apt-get install open-vm-tools
+
+sudo apt-get install open-vm-tools-desktop
+
+sudo reboot
+
+# Install curl
+
+sudo apt install curl
+
+curl -V
+
+
+# install prerequisites with official scripts
+
+curl -O https://hyperledger.github.io/composer/latest/prereqs-ubuntu.sh
+
+chmod u+x prereqs-ubuntu.sh
+
+./prereqs-ubuntu.sh
