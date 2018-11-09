@@ -1,0 +1,11 @@
+# starting playground offline
+
+# start hyperledger fabric 
+
+./startFabric.sh
+
+# start playground
+
+composer-playground
+
+
