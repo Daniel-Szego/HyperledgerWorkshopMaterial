@@ -1,0 +1,152 @@
+# Installation for dev envrionment already exists !!
+# Link: https://hyperledger.github.io/composer/latest/tutorials/deploy-to-fabric-multi-org
+# Version 1.2.1
+
+cd ~/fabric-dev-servers
+export FABRIC_VERSION=hlfv12
+./stopFabric.sh
+./teardownFabric.sh
+
+git clone https://github.com/mahoney1/fabric-samples.git
+
+cd fabric-samples
+
+curl -sSL http://bit.ly/2ysbOFE | bash -s 1.2.1 1.2.1 0.4.10
+
+git checkout multi-org
+
+cd first-network
+
+./byfn.sh -m generate
+
+./byfn.sh -m up -s couchdb -a
+
+composer card delete -c PeerAdmin@byfn-network-org1
+composer card delete -c PeerAdmin@byfn-network-org2
+composer card delete -c alice@trade-network
+composer card delete -c bob@trade-network
+composer card delete -c admin@trade-network
+composer card delete -c PeerAdmin@fabric-network
+
+rm -fr $HOME/.composer
+
+mkdir -p /tmp/composer/org1
+
+mkdir -p /tmp/composer/org2
+
+# Semi manual steps: creating byfn-network.json
+
+awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt > /tmp/composer/org1/ca-org1.txt
+
+awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt > /tmp/composer/org2/ca-org2.txt
+
+awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt > /tmp/composer/ca-orderer.txt
+
+# Semi manual steps: importing / replacing certificates into byfn-network.json
+
+# Semi manual steps: configuring client connection profiles byfn-network-org1.json
+
+# Semi manual steps: configuring client connection profiles byfn-network-org2.json
+
+export ORG1=crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+
+cp -p $ORG1/signcerts/A*.pem /tmp/composer/org1
+
+cp -p $ORG1/keystore/*_sk /tmp/composer/org1
+
+export ORG2=crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
+
+cp -p $ORG2/signcerts/A*.pem /tmp/composer/org2
+
+cp -p $ORG2/keystore/*_sk /tmp/composer/org2
+
+composer card create -p /tmp/composer/org1/byfn-network-org1.json -u PeerAdmin -c /tmp/composer/org1/Admin@org1.example.com-cert.pem -k /tmp/composer/org1/*_sk -r PeerAdmin -r ChannelAdmin -f PeerAdmin@byfn-network-org1.card
+
+composer card create -p /tmp/composer/org2/byfn-network-org2.json -u PeerAdmin -c /tmp/composer/org2/Admin@org2.example.com-cert.pem -k /tmp/composer/org2/*_sk -r PeerAdmin -r ChannelAdmin -f PeerAdmin@byfn-network-org2.card
+
+composer card import -f PeerAdmin@byfn-network-org1.card --card PeerAdmin@byfn-network-org1
+
+composer card import -f PeerAdmin@byfn-network-org2.card --card PeerAdmin@byfn-network-org2
+
+composer network install --card PeerAdmin@byfn-network-org1 --archiveFile trade-network.bna
+
+composer network install --card PeerAdmin@byfn-network-org2 --archiveFile trade-network.bna
+
+# Semi manual steps: defining endorsement policy endorsement-policy.json
+
+composer identity request -c PeerAdmin@byfn-network-org1 -u admin -s adminpw -d alice
+
+composer identity request -c PeerAdmin@byfn-network-org2 -u admin -s adminpw -d bob
+
+composer network start -c PeerAdmin@byfn-network-org1 -n trade-network -V 0.2.6-deploy.1 -o endorsementPolicyFile=/tmp/composer/endorsement-policy.json -A alice -C alice/admin-pub.pem -A bob -C bob/admin-pub.pem
+
+composer card create -p /tmp/composer/org1/byfn-network-org1.json -u alice -n trade-network -c alice/admin-pub.pem -k alice/admin-priv.pem
+
+composer card import -f alice@trade-network.card
+
+composer network ping -c alice@trade-network
+
+composer participant add -c alice@trade-network -d '{"$class":"org.example.trading.Trader","tradeId":"trader1-org1", "firstName":"Jo","lastName":"Doe"}'
+
+composer identity issue -c alice@trade-network -f jo.card -u jdoe -a "resource:org.example.trading.Trader#trader1-org1"
+
+composer card import -f jo.card
+
+composer network ping -c jdoe@trade-network
+
+composer transaction submit --card jdoe@trade-network -d '{"$class": "org.hyperledger.composer.system.AddAsset", "targetRegistry" : "resource:org.hyperledger.composer.system.AssetRegistry#org.example.trading.Commodity", "resources": [{"$class": "org.example.trading.Commodity","tradingSymbol":"EMA", "description":"Corn commodity","mainExchange":"EURONEXT", "quantity":"10","owner":"resource:org.example.trading.Trader#trader1-org1"}]}'
+
+composer card create -p /tmp/composer/org2/byfn-network-org2.json -u bob -n trade-network -c bob/admin-pub.pem -k bob/admin-priv.pem
+
+composer card import -f bob@trade-network.card
+
+composer network ping -c bob@trade-network
+
+composer participant add -c bob@trade-network -d '{"$class":"org.example.trading.Trader","tradeId":"trader2-org2", "firstName":"Dave","lastName":"Lowe"}'
+
+composer identity issue -c bob@trade-network -f dave.card -u dlowe -a "resource:org.example.trading.Trader#trader2-org2"
+
+composer card import -f dave.card
+
+composer network ping -c dlowe@trade-network
+
+composer transaction submit --card jdoe@trade-network -d '{"$class":"org.example.trading.Trade","commodity":"resource:org.example.trading.Commodity#EMA","newOwner":"resource:org.example.trading.Trader#trader2-org2"}'
+
+composer network list -c dlowe@trade-network
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
