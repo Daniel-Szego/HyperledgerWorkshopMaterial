@@ -17,6 +17,12 @@
  */
 namespace org.sor.basic
 
+concept Cim {
+	o String varos
+    o String utca
+    o Integer szam
+  }
+  
 enum SortTipusEnum {
 	o Pilsner
     o Guiness
@@ -34,12 +40,21 @@ asset HordoSorAsset identified by hordoId {
 participant SorKeszito identified by sorKeszitoId {
   o String sorKeszitoId
   o String cegNev
+  o Cim cim optional
 }
 
 participant SorIvo identified by sorIvoId {
   o String sorIvoId
   o String sorIvoNev
+  o Cim cim optional
 }
+
+transaction CreateTestData {
+}
+
+transaction DeleteAllData {
+}
+
 
 transaction SorKeszites {
  --> SorKeszito sorKeszito
@@ -53,8 +68,13 @@ transaction SorIvas {
  o Integer mennyi
 }
 
+event HordoSorElkeszult {
+  o String hordoNeve
+  o String ivoNeve
+}
 
-event SampleEvent {
-  o String oldValue
-  o String newValue
+
+event MegittukAHordoSort {
+  o String hordoNeve
+  o String ivoNeve
 }

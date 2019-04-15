@@ -1,0 +1,25 @@
+/**
+ * New query file
+ */
+
+query Q1{
+  description: "Select all sorhordo."
+  statement:
+      SELECT org.sor.basic.HordoSorAsset
+}
+
+    
+query Q2 {
+  description: "Select all pilsner sor"
+  statement:
+      SELECT org.sor.basic.HordoSorAsset
+          WHERE (sorTipus=='Pilsner')
+}
+
+query Q3 {
+  description: "Select all sor tipus"
+  statement:
+      SELECT org.sor.basic.HordoSorAsset
+          WHERE (sorTipus==_$sorParam)
+}
+
