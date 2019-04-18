@@ -11,9 +11,11 @@ const namespace = "org.supplychain.green.model";
  */
 async function InitTestDataFunction(param) {  
   
-      const ghgBsaeLineInfo = await request.get( { uri:'https://iaspub.epa.gov/enviro/efservice/tri_facility/state_abbr/VA/rows/102:102/JSON', json: true});
-    const baseline = parseInt(ghgBsaeLineInfo[0].PREF_QA_CODE) / 10;
-
+//      const ghgBsaeLineInfo = await request.get( { uri:'https://iaspub.epa.gov/enviro/efservice/tri_facility/state_abbr/VA/rows/102:102/JSON', json: true});
+//    const baseline = parseInt(ghgBsaeLineInfo[0].PREF_QA_CODE) / 10;
+    const baseline = 100;
+  
+  
     console.log('init test data');
 
     console.log('Creating a manufacturer company');  

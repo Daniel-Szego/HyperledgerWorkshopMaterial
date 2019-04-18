@@ -6,11 +6,11 @@
 
 # deploy stuff
 
-composer network install --card PeerAdmin@hlfv1 --archiveFile greensupplychain_offline@0.0.2.bna
+composer network install --card PeerAdmin@hlfv1 --archiveFile greensupplychain@0.0.1.bna
 
 # getting deployed full stuff name and version
 
-composer archive list -a greensupplychain_offline@0.0.2.bna
+composer archive list -a greensupplychain@0.0.1.bna
 
 # start business network 
 
