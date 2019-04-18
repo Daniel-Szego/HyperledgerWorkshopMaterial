@@ -6,15 +6,15 @@
 
 # deploy stuff
 
-composer network install --card PeerAdmin@hlfv1 --archiveFile greensupplychain@0.0.1.bna
+composer network install --card PeerAdmin@hlfv1 --archiveFile greenchainnetwork@0.0.1.bna
 
 # getting deployed full stuff name and version
 
-composer archive list -a greensupplychain@0.0.1.bna
+composer archive list -a  greenchainnetwork@0.0.1.bna
 
 # start business network 
 
-composer network start --networkName greensupplychain --networkVersion 0.2.6-deploy.57 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
+composer network start --networkName greenchainnetwork --networkVersion 0.2.6-deploy.56 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
 
 # import network card identity
 
