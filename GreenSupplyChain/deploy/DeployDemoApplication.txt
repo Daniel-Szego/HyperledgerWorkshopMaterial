@@ -14,7 +14,7 @@ composer archive list -a  greenchainnetwork@0.0.1.bna
 
 # start business network 
 
-composer network start --networkName greenchainnetwork --networkVersion 0.2.6-deploy.56 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
+composer network start --networkName greensupplychain --networkVersion 0.2.6-deploy.57 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
 
 # import network card identity
 
@@ -22,7 +22,7 @@ composer card import --file networkadmin.card
 
 # test if stuffs are cool
 
-composer network ping --card admin@greensupplychain
+composer network ping --card admin@greenchainnetwork
 
 # rest server
 
